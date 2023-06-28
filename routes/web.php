@@ -18,3 +18,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/entities/import-from-api', [EntityController::class, 'importEntitiesFromApi']);
+Route::get('/api/{codeCategory}', [EntityController::class, 'getEntitiesByCategory']);

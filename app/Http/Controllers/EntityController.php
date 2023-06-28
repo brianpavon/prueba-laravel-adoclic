@@ -101,4 +101,40 @@ class EntityController extends Controller
             'total_count' => $notImportedCount + $importedCount
         ]);
     }
+
+    public function getEntitiesByCategory(Request $request,$codeCategory)
+    {
+        $category = Category::where('category', ucfirst($codeCategory))->first();
+        
+        if (!$category) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No se encontró la categoría ingresada.',
+                'data' => [],
+            ]);
+        }
+        $entities = $category->entities;
+
+        if(count($entities) === 0){
+            return response()->json([
+                'success' => false,
+                'message' => 'No hay entidades para la categoría ingresada.',
+                'data' => [],
+            ]);
+        }
+
+        foreach ($entities as $entity) {
+            $results[]=[
+                    'api'=> $entity->api,
+                    'description'=> $entity->description,
+                    'link'=> $entity->link,
+                    'category'=> (object)['id'=>$entity->category->id,'category'=>$entity->category->category]                   
+                    ];
+        }
+        return response()->json([
+            'success' => true,
+            'data' => $results,
+        ]);
+        
+    }
 }
