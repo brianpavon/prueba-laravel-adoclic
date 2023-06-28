@@ -13,4 +13,9 @@ class Entity extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    public static function existingLinks()
+    {
+        return self::pluck('link')->toArray();
+    }
 }
